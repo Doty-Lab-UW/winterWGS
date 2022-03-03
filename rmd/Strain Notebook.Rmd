@@ -1,0 +1,149 @@
+---
+title: Strain Documentation
+subtitle: <Your subtitle> (if needed)
+author:
+  - Maha Fathali, University of Washington, mahaf@uw.edu
+  - Robert Tournay, University of Washington, tournay@uw.edu
+  - (PI) Sharon Doty, University of Washington, sldoty@uw.edu
+date: 'Report Date: `r Sys.Date()`'
+
+output:
+  rmdformats::robobook:
+    use_bookdown: true
+    fig_caption: yes
+    fig_align: "left"
+    thumbnail: true
+    lightbox: true
+    highlight: "kate"
+
+csl: style/genetics.csl
+link-citations: yes
+bibliography: style/references.bib
+---
+
+```{r, setup, include=F}
+
+# Loads kableExtra and tidyverse packages; global
+library(kableExtra)
+library(tidyverse)
+
+```
+---
+
+## Project information {#mainTitle}
+
+### Introduction {#shortIntro}
+
+This is a documentation of de Novo assembly, annotation, and identification of 2 strains named 11RA and 13R isolated from poplar trees. Geneious Prime is used for the assembly, RAST for the annotation, and TYGS for identification. 
+
+### Collaborators {#collab}
+
+> If other than Robert or Sharon
+> Name, affiliation, email
+None
+
+### Summary of findings {#sumFindings}
+
+> Exactly what it says - do this last
+
+### Location of data files {#locFiles}
+
+Raw data: *<file path to raw data>*
+Project file: *<file path to project data>* 
+GitHub: *https://github.com/mahafa/myrepo*
+
+---
+
+## DNA Isolation and Sequencing {#prep}
+
+> Notes on strain history, and prep for seq.
+
+## Strains used in this study {#strainsUsed}
+
+> table of strains
+
+## *de Novo* Assemblies using Geneious Prime {#deNovo}
+
+> Methods (steps)
+> Table of Assembly Stats
+> Brief summary
+> Input/output directories/files
+ 
+Geneious Prime *(v2022.0.2)*
+BBDuk and BBNorm *(v1)*
+R *version 4.1.2 (2021-11-01) - "Bird Hippie"*
+
+Date of assemblies:        2/1/22, 2/15/22
+
+Methods:  
+1. Paired-end raw sequence reads files were combined into one file and imported to Geneious Prime.
+2. Reads were trimmed using the BBDuk plug-in with phred score minimum 30 and reads < 20 bp discarded. 
+3. Trimmed read files were normalized using the BBNorm plug-in with target coverage level 40 and minimum depth 6. 
+4. Trimmed & normalized read files were assembled using the GP assembler using the following settings:
+  Assembler: Geneious
+  Sensitivity: Medium-Low Sensitivity/Fast
+  Trim Before Assembly: No
+  Save Consensus Sequences: TRUE
+  Circularize contigs of => 3 sequences, if ends match: True
+  Produce Scaffolds: True
+5. Contigs ≥ 1000 bp were extracted for downstream applications.
+
+Table of Assembly:
+#This creates a variable to store the caption text, keeps code below cleaner
+gp_cap <- "Geneious Prime Assembly Statistics"
+
+# This command imports the data into R and saves it as the variable strains
+gpStats <- read.csv("data/GP-stats.csv")
+
+# Creates formatted table from data 
+kbl(gpStats, caption = gp_cap) %>%
+  kable_styling() %>%
+  
+  column_spec(2, italic=T)
+  
+Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage called ?, which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 with calling N instead.
+
+## Quality of assembly with CheckM (KBASE) {#chkM}
+
+> Website and app info
+> Methods (steps)
+> Table of Assembly Stats
+> Brief summary
+> Input/output directories/files
+
+[KBASE](https://www.kbase.us/)\
+CheckM version                        *shown on App*
+Date accessed:                        *input date(s), maybe be several dates*
+Reference: [@parks_checkm_2015]
+
+## Annotation of assembled draft genomes with RAST {#RAST}
+
+> Website and app info
+> Methods (steps)
+> Table of Assembly Stats
+> Brief summary
+> Input/output directories/files
+
+[RAST](https://rast.nmpdr.org/rast.cgi)
+RAST version                          *Header of main webpage*
+Data stored indefinitely (not specified) in user's page, downloadable\
+Date accessed:                        *input date(s), maybe be several dates*
+Reference: [@aziz_rast_2008]
+
+## Identification of strains with TYGS {#TYGS}
+
+> Website and app info
+> Methods (steps)
+> Table of Assembly Stats
+> Brief summary
+> Input/output directories/files
+
+[TYGS](https://tygs.dsmz.de/)\
+TYGS version                          *Bottom of webpage*
+Data stored for 60 days on site under unique ID, downloadable\
+Date accessed:                        *input date(s), maybe be several dates*
+Reference: [@meier-kolthoff_genome_2013]
+
+---
+
+# References {#refs}
