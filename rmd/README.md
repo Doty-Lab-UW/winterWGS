@@ -2,7 +2,7 @@ README.md
 
 # /rmd/
 
-This is the R Notebook folder. Includes all files associated with your notebook, including (but not limited to) 
+This is the R Notebook folder. Includes all files associated with my notebook, including (but not limited to) 
 
 Directories:
 /data
