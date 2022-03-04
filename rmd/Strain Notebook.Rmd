@@ -1,13 +1,13 @@
 ---
-title: Strain Documentation
+title: Winter Strains WGS Documentation
 subtitle: <Your subtitle> (if needed)
 author:
   - Maha Fathali, University of Washington, mahaf@uw.edu
   - Robert Tournay, University of Washington, tournay@uw.edu
   - (PI) Sharon Doty, University of Washington, sldoty@uw.edu
 date: 'Report Date: `r Sys.Date()`'
-
-output:
+  
+output: html_notebook
   rmdformats::robobook:
     use_bookdown: true
     fig_caption: yes
@@ -16,7 +16,7 @@ output:
     lightbox: true
     highlight: "kate"
 
-csl: style/genetics.csl
+#csl: style/genetics.csl
 link-citations: yes
 bibliography: style/references.bib
 ---
@@ -34,13 +34,11 @@ library(tidyverse)
 
 ### Introduction {#shortIntro}
 
-This is a documentation of de Novo assembly, annotation, and identification of 2 strains named 11RA and 13R isolated from poplar trees. Geneious Prime is used for the assembly, RAST for the annotation, and TYGS for identification. 
+This is a documentation of de Novo assembly, annotation, and identification of 2 strains 11RA and 13R isolated from poplar trees?. Geneious Prime is used for the assembly, RAST for the annotation, and TYGS for identification. 
 
 ### Collaborators {#collab}
 
-> If other than Robert or Sharon
-> Name, affiliation, email
-None
+None or include Jackson?
 
 ### Summary of findings {#sumFindings}
 
@@ -50,7 +48,7 @@ None
 
 Raw data: *<file path to raw data>*
 Project file: *<file path to project data>* 
-GitHub: *https://github.com/mahafa/myrepo*
+GitHub: *https://github.com/mahafa/winterWGS*
 
 ---
 
@@ -70,7 +68,7 @@ GitHub: *https://github.com/mahafa/myrepo*
 > Input/output directories/files
  
 Geneious Prime *(v2022.0.2)*
-BBDuk and BBNorm *(v1)*
+BBDuk and BBNorm *(v38.84)*
 R *version 4.1.2 (2021-11-01) - "Bird Hippie"*
 
 Date of assemblies:        2/1/22, 2/15/22
@@ -80,12 +78,12 @@ Methods:
 2. Reads were trimmed using the BBDuk plug-in with phred score minimum 30 and reads < 20 bp discarded. 
 3. Trimmed read files were normalized using the BBNorm plug-in with target coverage level 40 and minimum depth 6. 
 4. Trimmed & normalized read files were assembled using the GP assembler using the following settings:
-  Assembler: Geneious
-  Sensitivity: Medium-Low Sensitivity/Fast
-  Trim Before Assembly: No
-  Save Consensus Sequences: TRUE
-  Circularize contigs of => 3 sequences, if ends match: True
-  Produce Scaffolds: True
+- Assembler: Geneious
+- Sensitivity: Medium-Low Sensitivity/Fast
+- Trim Before Assembly: No
+- Save Consensus Sequences: TRUE
+- Circularize contigs of => 3 sequences, if ends match: True
+- Produce Scaffolds: True
 5. Contigs ≥ 1000 bp were extracted for downstream applications.
 
 Table of Assembly:
@@ -101,7 +99,7 @@ kbl(gpStats, caption = gp_cap) %>%
   
   column_spec(2, italic=T)
   
-Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage called ?, which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 with calling N instead.
+Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage called "?", which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 with calling "N" instead.
 
 ## Quality of assembly with CheckM (KBASE) {#chkM}
 
@@ -111,10 +109,30 @@ Two endophyte strains were assembled from paired-end raw sequence reads using Ge
 > Brief summary
 > Input/output directories/files
 
-[KBASE](https://www.kbase.us/)\
-CheckM version                        *shown on App*
-Date accessed:                        *input date(s), maybe be several dates*
-Reference: [@parks_checkm_2015]
+[KBASE](https://www.kbase.us/)
+CheckM version                        *v1.0.18*
+Date accessed:                        *2/16/22*
+Reference: [@parks_checkm_2015] 
+
+The Geneious Prime ConSeq assemblies, filtered ≥1000 bp, were analyzed in CheckM for quality of the assemblies; completeness of coverage and contamination. Thresholds for high quality assemblies are ≥95% completeness and ≤5% contamination.
+
+Table of Assembly:
+#This creates a variable to store the caption text, keeps code below cleaner
+cm_cap <- "CheckM Statistics"
+
+# This command imports the data into R and saves it as the variable strains
+cmStats <- read.csv("data/checkM.csv")
+
+# Creates formatted table from data 
+kbl(cmStats, caption = cm_cap) %>%
+  kable_styling() %>%
+  
+  column_spec(2, italic=T)
+
+All strains were found to have >98% completeness with <4% contamination.
+
+Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta  
+Output files: ~/winterWGS/data/checkM.csv
 
 ## Annotation of assembled draft genomes with RAST {#RAST}
 
@@ -125,11 +143,35 @@ Reference: [@parks_checkm_2015]
 > Input/output directories/files
 
 [RAST](https://rast.nmpdr.org/rast.cgi)
-RAST version                          *Header of main webpage*
+RAST version                          *v2.0*
 Data stored indefinitely (not specified) in user's page, downloadable\
-Date accessed:                        *input date(s), maybe be several dates*
-Reference: [@aziz_rast_2008]
+Date accessed:                        *2/16/22*
+Reference: [@aziz_rast_2008]  
+  
+The Geneious Prime ConSeq assemblies, filtered ≥1000 bp, were submitted for annotation with the following settings:  
+- RAST annotation scheme: RASTtk
+- Customize RASTtk pipeline: unchecked
+- Automatically fix errors: checked
+- Fix frame shifts: checked
+- Build metabolic model: checked
+- Turn on debug: checked
+- Set verbose level: 0
+- Disable replication: unchecked  
+    
+Results:  
+Strain 11RA (Azospirillum), Subsystems: 376, Coding seq.: 7175, RNAs: 75
+Strain 13R (Azotobacter), Subsystems: 337, Coding seq.: 4966, RNAs: 60  
+ 
+No summary.  
 
+Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta
+Output directory: ~/output/RAST/
+Output files:
+
+- <strain>-aaRAST.fasta the amino acid sequences
+- <strain>-gbRAST.gbk GenBank format
+- <strain>-txtRAST.txt full file, includes na, aa, protein, PEGs
+  
 ## Identification of strains with TYGS {#TYGS}
 
 > Website and app info
@@ -139,10 +181,30 @@ Reference: [@aziz_rast_2008]
 > Input/output directories/files
 
 [TYGS](https://tygs.dsmz.de/)\
-TYGS version                          *Bottom of webpage*
+TYGS version                          *v326*
 Data stored for 60 days on site under unique ID, downloadable\
-Date accessed:                        *input date(s), maybe be several dates*
-Reference: [@meier-kolthoff_genome_2013]
+Date accessed:                        *2/18/22*
+Reference: [@meier-kolthoff_genome_2013]  
+
+The annotated assemblies were submited to the Type (Strain) Genome Server (TYGS) for identification.
+
+TYGS infers species/subspecies taxonomic classification and phylogenies using digital DNA:DNA hybridization (dDDH) of whole genomes against a type-strain database of > 15k spp.
+
+A dDDH d4 score of >70% is the threshold for classification to the species level.  
+  
+DATA
+
+13R was identified to the species level while 11RA were only matched to the genus level, indicating that it may represent a novel species.  
+
+Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta
+Output directory: ~/output/TYGS
+Output files:
+
+<strain>-TYGS.pdf Full report
+<strain>-16Sphy.txt Phylogenetic tree from 16S rRNA alignments
+<strain>-WGphy.txt Phylogenetic tree from WGS alignments  
+<strain>-dDDH.csv dDDH scores for the closest type-strain matches
+<strain>-ref.csv Reference literature for compared type-strain species
 
 ---
 
