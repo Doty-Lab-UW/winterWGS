@@ -7,7 +7,7 @@ author:
   - (PI) Sharon Doty, University of Washington, sldoty@uw.edu
 date: 'Report Date: `r Sys.Date()`'
   
-output: html_notebook
+output: 
   rmdformats::robobook:
     use_bookdown: true
     fig_caption: yes
@@ -18,11 +18,10 @@ output: html_notebook
 
 #csl: style/genetics.csl
 link-citations: yes
-bibliography: style/references.bib
+#bibliography: style/references.bib
 ---
 
 ```{r, setup, include=F}
-
 # Loads kableExtra and tidyverse packages; global
 library(kableExtra)
 library(tidyverse)
@@ -34,7 +33,7 @@ library(tidyverse)
 
 ### Introduction {#shortIntro}
 
-This is a documentation of de Novo assembly, annotation, and identification of 2 strains 11RA and 13R isolated from poplar trees?. Geneious Prime is used for the assembly, RAST for the annotation, and TYGS for identification. 
+This is a documentation of de Novo assembly, annotation, and identification of 2 bacterial strains 11RA and 13R isolated from poplar trees. Geneious Prime is used for the assembly, KBase for quality determination, RAST for the annotation, and TYGS for identification. 
 
 ### Collaborators {#collab}
 
@@ -47,8 +46,8 @@ None or include Jackson?
 ### Location of data files {#locFiles}
 
 Raw data: *<file path to raw data>*
-Project file: *<file path to project data>* 
-GitHub: *https://github.com/mahafa/winterWGS*
+Project file: *~/output* 
+GitHub: *https://github.com/Doty-Lab-UW/winterWGS*
 
 ---
 
@@ -86,7 +85,9 @@ Methods:
 - Produce Scaffolds: True
 5. Contigs ≥ 1000 bp were extracted for downstream applications.
 
-Table of Assembly:
+
+```{r, table, include=F}
+
 #This creates a variable to store the caption text, keeps code below cleaner
 gp_cap <- "Geneious Prime Assembly Statistics"
 
@@ -98,7 +99,8 @@ kbl(gpStats, caption = gp_cap) %>%
   kable_styling() %>%
   
   column_spec(2, italic=T)
-  
+```  
+
 Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage called "?", which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 with calling "N" instead.
 
 ## Quality of assembly with CheckM (KBASE) {#chkM}
