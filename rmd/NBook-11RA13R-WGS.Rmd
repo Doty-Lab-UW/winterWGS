@@ -29,26 +29,26 @@ library(tidyverse)
 ```
 ---
 
-## Project information {#mainTitle}
+# Project information {#mainTitle}
 
-### Introduction {#shortIntro}
+## Introduction {#shortIntro}
 
-This is a documentation of de Novo assembly, annotation, and identification of 2 bacterial strains 11RA and 13R isolated from poplar trees. Geneious Prime is used for the assembly, KBase for quality determination, RAST for the annotation, and TYGS for identification. 
+This is a documentation of de Novo assembly, annotation, and identification of 2 bacterial strains labeled 11RA and 13R isolated from poplar trees. Geneious Prime is used for the assembly, KBase for quality determination, RAST for the annotation, and TYGS for identification. Genome characterization will be the next step.
 
-### Collaborators
+## Collaborators
 Jackson Hall, <jrhall@uw.edu>
 
-### Summary of findings {#sumFindings}
+## Summary of findings {#sumFindings}
 
-Two enophyte strains were submitted for sequencing and analysis. 
+Two endophyte strains were submitted for sequencing and analysis. 
 
-*De Novo* whole genome assemblies were completed on trimmed and normalized raw sequence reads with the Geneious Prime Assembler, and then submitted to RAST and TYGS for annotation and identification to the species level. Quality of assemblies were high, with >98% completeness, mean depth of coverage >= 50, and low contamination. The estimated genome size, gene count, and GC content were similar to other endophytic genomes of the same genus.
+*De Novo* whole genome assemblies were completed on trimmed and normalized raw sequence reads with the Geneious Prime Assembler, and then submitted to RAST and TYGS for annotation and identification to the species level. Quality of assemblies were high, with >98% completeness, mean depth of coverage >/= 50, and minimal contamination. The estimated genome size, gene count, and GC content were similar to other endophytic genomes of the same genus.
 
-13R was identified to the species level (Azotobacter beijerinckii) while 11A was not. 
+13R was identified to the species level (Azotobacter beijerinckii) while 11RA was not. 
 
-13R is deemed ready for characterization.
+Therefore, 13R is deemed ready for characterization.
 
-### Location of data files {#locFiles}
+## Location of data files {#locFiles}
 
 Raw data: *DotyLabGoogleDrive/Bio_Training_Data/maha_raw_data*   
 Project file: *~/output*   
@@ -56,12 +56,12 @@ GitHub: *https://github.com/Doty-Lab-UW/winterWGS*
 
 ---
 
-## Strains used in this study {#strainsUsed}
+# Strains used in this study {#strainsUsed}
 
 ```{r, table0, echo = F, message = F, warning = F}
 
 #This creates a variable to store the caption text, keeps code below cleaner
-strain_cap <- "Strains"
+strain_cap <- "Strains Used"
 
 # This command imports the data into R and saves it as the variable strains
 strain_Stats <- read.csv("data/strains.csv")
@@ -72,7 +72,9 @@ kbl(strain_Stats, caption = strain_cap) %>%
   column_spec(2, italic=T)
 ```  
 
-## *de Novo* Assemblies using Geneious Prime {#deNovo}
+The sequencing label is used in place of the strain name for both samples throughout this report for consistency, as 11RA did not have a strain name.
+
+# *de Novo* Assemblies using Geneious Prime {#deNovo}
  
 Geneious Prime *(v2022.0.2)*  
 BBDuk and BBNorm *(v38.84)*  
@@ -108,12 +110,12 @@ kbl(gpStats, caption = gp_cap) %>%
   column_spec(2, italic=T)
 ```  
 
-Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage calling "?", which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 calling "N" instead in places of no coverage.
+Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. Assemblies were first done on 2/1/22 with settings including no coverage calling "?", which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 calling "N" instead in places of no coverage.
 
 Input files: DotyLabGoogleDrive/Bio_Training_Data/maha_raw_data  
 Output files: ~/winterWGS/output/GP-ConSeq/<strain>-ConSeq.fasta
 
-## Quality of assembly with CheckM (KBASE) {#chkM}
+# Quality of assembly with CheckM (KBASE) {#chkM}
 
 [KBASE](https://www.kbase.us/)  
 CheckM version                        *v1.0.18*  
@@ -140,7 +142,7 @@ All strains were found to have >98% completeness with <4% contamination.
 Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta  
 Output files: ~/winterWGS/data/checkM.csv
 
-## Annotation of assembled draft genomes with RAST {#RAST}
+# Annotation of assembled draft genomes with RAST {#RAST}
 
 [RAST](https://rast.nmpdr.org/rast.cgi)  
 RAST version                          *v2.0*  
@@ -170,11 +172,11 @@ Output files:
 - <strain>-gbRAST.gbk GenBank format
 - <strain>-txtRAST.txt full file, includes na, aa, protein, PEGs
   
-## Identification of strains with TYGS {#TYGS}
+# Identification of strains with TYGS {#TYGS}
 
 [TYGS](https://tygs.dsmz.de/)\
 TYGS version                          *v326*  
-Data stored for 60 days on site under unique ID, downloadable\
+Data stored for 60 days on site under unique ID, downloadable.  
 Date accessed:                        *2/18/22*  
 Reference: [@meier-kolthoff_genome_2013]  
 
@@ -198,7 +200,7 @@ kbl(tygs_Stats, caption = tygs_cap) %>%
   column_spec(2, italic=T)
 ```
 
-13R was identified to the species level while 11RA were only matched to the genus level, indicating that it may represent a novel species.  
+13R was identified to the species level while 11RA was only matched to the genus level, indicating that it may represent a novel species.  
 
 Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta  
 Output directory: ~/output/TYGS  
