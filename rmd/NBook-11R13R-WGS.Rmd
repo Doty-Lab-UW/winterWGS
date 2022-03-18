@@ -1,5 +1,5 @@
 ---
-title: Winter Strains WGS Documentation
+title: Winter Strains (11RA and 13R) WGS Documentation
 #subtitle: <Your subtitle> 
 author:
   - Maha Fathali, University of Washington, mahaf@uw.edu
@@ -35,36 +35,44 @@ library(tidyverse)
 
 This is a documentation of de Novo assembly, annotation, and identification of 2 bacterial strains 11RA and 13R isolated from poplar trees. Geneious Prime is used for the assembly, KBase for quality determination, RAST for the annotation, and TYGS for identification. 
 
-### Collaborators {#collab}
-
-None or include Jackson?
+### Collaborators
+Jackson Hall, <jrhall@uw.edu>
 
 ### Summary of findings {#sumFindings}
 
-<do this last>
+Two enophyte strains were submitted for sequencing and analysis. 
+
+*De Novo* whole genome assemblies were completed on trimmed and normalized raw sequence reads with the Geneious Prime Assembler, and then submitted to RAST and TYGS for annotation and identification to the species level. Quality of assemblies were high, with >98% completeness, mean depth of coverage >= 50, and low contamination. The estimated genome size, gene count, and GC content were similar to other endophytic genomes of the same genus.
+
+13R was identified to the species level (Azotobacter beijerinckii) while 11A was not. 
+
+13R is deemed ready for characterization.
 
 ### Location of data files {#locFiles}
 
-Raw data: *<file path to raw data>*  
+Raw data: *DotyLabGoogleDrive/Bio_Training_Data/maha_raw_data*   
 Project file: *~/output*   
 GitHub: *https://github.com/Doty-Lab-UW/winterWGS*
 
 ---
 
-## DNA Isolation and Sequencing {#prep}
-
-<Notes on strain history, and prep for sequencing>
-
 ## Strains used in this study {#strainsUsed}
 
-<table of strains>
+```{r, table0, echo = F, message = F, warning = F}
+
+#This creates a variable to store the caption text, keeps code below cleaner
+strain_cap <- "Strains"
+
+# This command imports the data into R and saves it as the variable strains
+strain_Stats <- read.csv("data/strains.csv")
+
+# Creates formatted table from data 
+kbl(strain_Stats, caption = strain_cap) %>%
+  kable_styling() %>%
+  column_spec(2, italic=T)
+```  
 
 ## *de Novo* Assemblies using Geneious Prime {#deNovo}
-
-> Methods (steps)
-> Table of Assembly Stats
-> Brief summary
-> Input/output directories/files
  
 Geneious Prime *(v2022.0.2)*  
 BBDuk and BBNorm *(v38.84)*  
@@ -86,7 +94,7 @@ Methods:
 5. Contigs ≥ 1000 bp were extracted for downstream applications.
 
 
-```{r, table, include=F}
+```{r, table, echo = F, message = F, warning = F}
 
 #This creates a variable to store the caption text, keeps code below cleaner
 gp_cap <- "Geneious Prime Assembly Statistics"
@@ -97,19 +105,15 @@ gpStats <- read.csv("data/GP-stats.csv")
 # Creates formatted table from data 
 kbl(gpStats, caption = gp_cap) %>%
   kable_styling() %>%
-  
   column_spec(2, italic=T)
 ```  
 
-Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage called "?", which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 with calling "N" instead.
+Two endophyte strains were assembled from paired-end raw sequence reads using Geneious Prime. The trimmed and normalized reads were used to form the assemblies using Geneious Prime assembler. The genome sizes and GC content appear reasonable compared to genome assemblies from other members of the same genus as the strains. One minor issue: assemblies were first done on 2/1/22 with settings including no coverage calling "?", which did not format correctly into downstream applications, therefore, assemblies were redone on 2/15/22 calling "N" instead in places of no coverage.
+
+Input files: DotyLabGoogleDrive/Bio_Training_Data/maha_raw_data  
+Output files: ~/winterWGS/output/GP-ConSeq/<strain>-ConSeq.fasta
 
 ## Quality of assembly with CheckM (KBASE) {#chkM}
-
-> Website and app info
-> Methods (steps)
-> Table of Assembly Stats
-> Brief summary
-> Input/output directories/files
 
 [KBASE](https://www.kbase.us/)  
 CheckM version                        *v1.0.18*  
@@ -118,7 +122,7 @@ Reference: [@parks_checkm_2015]
 
 The Geneious Prime ConSeq assemblies, filtered ≥1000 bp, were analyzed in CheckM for quality of the assemblies; completeness of coverage and contamination. Thresholds for high quality assemblies are ≥95% completeness and ≤5% contamination.
 
-```{r, table2, include=F}
+```{r, table2, echo = F, message = F, warning = F}
 #This creates a variable to store the caption text, keeps code below cleaner
 cm_cap <- "CheckM Statistics"
 
@@ -137,12 +141,6 @@ Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta
 Output files: ~/winterWGS/data/checkM.csv
 
 ## Annotation of assembled draft genomes with RAST {#RAST}
-
-> Website and app info
-> Methods (steps)
-> Table of Assembly Stats
-> Brief summary
-> Input/output directories/files
 
 [RAST](https://rast.nmpdr.org/rast.cgi)  
 RAST version                          *v2.0*  
@@ -163,8 +161,6 @@ The Geneious Prime ConSeq assemblies, filtered ≥1000 bp, were submitted for an
 Results:  
 Strain 11RA (Azospirillum), Subsystems: 376, Coding seq.: 7175, RNAs: 75  
 Strain 13R (Azotobacter), Subsystems: 337, Coding seq.: 4966, RNAs: 60  
- 
-No summary.  
 
 Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta  
 Output directory: ~/output/RAST/  
@@ -175,12 +171,6 @@ Output files:
 - <strain>-txtRAST.txt full file, includes na, aa, protein, PEGs
   
 ## Identification of strains with TYGS {#TYGS}
-
-> Website and app info
-> Methods (steps)
-> Table of Assembly Stats
-> Brief summary
-> Input/output directories/files
 
 [TYGS](https://tygs.dsmz.de/)\
 TYGS version                          *v326*  
@@ -194,7 +184,19 @@ TYGS infers species/subspecies taxonomic classification and phylogenies using di
 
 A dDDH d4 score of >70% is the threshold for classification to the species level.  
   
-DATA
+```{r, table3, echo = F, message = F, warning = F}
+#This creates a variable to store the caption text, keeps code below cleaner
+tygs_cap <- "TYGS Results for type-strain matches to our strains."
+
+# This command imports the data into R and saves it as the variable strains
+tygs_Stats <- read.csv("data/tygs.csv")
+
+# Creates formatted table from data 
+kbl(tygs_Stats, caption = tygs_cap) %>%
+  kable_styling() %>%
+  
+  column_spec(2, italic=T)
+```
 
 13R was identified to the species level while 11RA were only matched to the genus level, indicating that it may represent a novel species.  
 
@@ -202,7 +204,7 @@ Submitted files: ~/output/GP-ConSeq/<strain>-ConSeq.fasta
 Output directory: ~/output/TYGS  
 Output files:  
 
-<strain>-TYGS.pdf Full report  
+<strain>-TYGS.pdf Full report   
 <strain>-16Sphy.txt Phylogenetic tree from 16S rRNA alignments  
 <strain>-WGphy.txt Phylogenetic tree from WGS alignments    
 <strain>-dDDH.csv dDDH scores for the closest type-strain matches  
@@ -211,3 +213,43 @@ Output files:
 ---
 
 # References {#refs}
+
+KBase:
+
+Arkin AP, Cottingham RW, Henry CS, Harris NL, Stevens RL, Maslov S, et al. KBase: The United States Department of Energy Systems Biology Knowledgebase. Nature Biotechnology. 2018;36: 566. doi: 10.1038/nbt.4163
+
+RAST:
+
+The RAST Server: Rapid Annotations using Subsystems Technology.
+Aziz RK, Bartels D, Best AA, DeJongh M, Disz T, Edwards RA, Formsma K, Gerdes S, Glass EM, Kubal M, Meyer F, Olsen GJ, Olson R, Osterman AL, Overbeek RA, McNeil LK, Paarmann D, Paczian T, Parrello B, Pusch GD, Reich C, Stevens R, Vassieva O, Vonstein V, Wilke A, Zagnitko O.
+BMC Genomics, 2008
+
+The SEED and the Rapid Annotation of microbial genomes using Subsystems Technology (RAST).
+Overbeek R, Olson R, Pusch GD, Olsen GJ, Davis JJ, Disz T, Edwards RA, Gerdes S, Parrello B, Shukla M, Vonstein V, Wattam AR, Xia F, Stevens R. 
+Nucleic Acids Res. 2014 
+
+RASTtk: A modular and extensible implementation of the RAST algorithm for building custom annotation pipelines and annotating batches of genomes.
+Brettin T, Davis JJ, Disz T, Edwards RA, Gerdes S, Olsen GJ, Olson R, Overbeek R, Parrello B, Pusch GD, Shukla M, Thomason JA, Stevens R, Vonstein V, Wattam AR, Xia F.
+Sci Rep., 2015
+
+TYGS:
+
+Meier-Kolthoff JP, Göker M. TYGS is an automated high-throughput platform for state-of-the-art genome-based taxonomy. Nat. Commun. 2019;10: 2182. DOI: 10.1038/s41467-019-10210-3
+
+Meier-Kolthoff JP, Sardà Carbasse J, Peinado-Olarte RL, Göker M. TYGS and LPSN: a database tandem for fast and reliable genome-based classification and nomenclature of prokaryotes. Nucleic Acid Res. 2022;50: D801–D807. DOI: 10.1093/nar/gkab902
+
+Ondov BD, Treangen TJ, Melsted P, et al. Mash: Fast genome and metagenome distance estimation using MinHash. Genome Biol 2016;17: 1–14. DOI: 10.1186/s13059-016-0997-x
+
+Lagesen K, Hallin P. RNAmmer: consistent and rapid annotation of ribosomal RNA genes. Nucleic Acids Res. Oxford Univ Press; 2007;35: 3100–3108. DOI: 10.1093/nar/gkm160
+
+Camacho C, Coulouris G, Avagyan V, Ma N, Papadopoulos J, Bealer K, et al. BLAST+: architecture and applications. BMC Bioinformatics. 2009;10: 421. DOI: 10.1186/1471-2105-10-421
+
+Meier-Kolthoff JP, Auch AF, Klenk H-P, Göker M. Genome sequence-based species delimitation with confidence intervals and improved distance functions. BMC Bioinformatics. 2013;14: 60. DOI: 10.1186/1471-2105-14-60
+
+Lefort V, Desper R, Gascuel O. FastME 2.0: A comprehensive, accurate, and fast distance-based phylogeny inference program. Mol Biol Evol. 2015;32: 2798–2800. DOI: 10.1093/molbev/msv150
+
+Farris JS. Estimating phylogenetic trees from distance matrices. Am Nat. 1972;106: 645–667.
+
+Kreft L, Botzki A, Coppens F, Vandepoele K, Van Bel M. PhyD3: A phylogenetic tree viewer with extended phyloXML support for functional genomics data visualization. Bioinformatics. 2017;33: 2946–2947. DOI: 10.1093/bioinformatics/btx324
+
+Meier-Kolthoff JP, Hahnke RL, Petersen J, Scheuner C, Michael V, Fiebig A, et al. Complete genome sequence of DSM 30083T, the type strain (U5/41T) of Escherichia coli, and a proposal for delineating subspecies in microbial taxonomy. Stand Genomic Sci. 2014;9: 2. DOI: 10.1186/1944-3277-9-2
